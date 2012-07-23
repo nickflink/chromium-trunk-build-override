@@ -140,7 +140,6 @@ export STRIP=$(echo ${ANDROID_TOOLCHAIN}/*-strip)
 # to canonicalize them (remove double '/', remove trailing '/', etc).
 DEFINES+=" OS=android"
 DEFINES+=" android_build_type=0"  # Currently, Only '0' is supportted.
-DEFINES+=" host_os=${host_os}"
 DEFINES+=" linux_fpic=1"
 DEFINES+=" release_optimize=s"
 DEFINES+=" linux_use_tcmalloc=0"
