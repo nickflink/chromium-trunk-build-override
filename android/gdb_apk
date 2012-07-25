@@ -20,7 +20,8 @@
 # Returns the command's status
 # Note: the command's stderr is lost
 adb_shell () {
-  local TMPOUT="$(mktemp)"
+  local tempname=`basename $0`
+  local TMPOUT=`mktemp -t ${tempname}` || exit 1
   local LASTLINE RET
   local ADB=${ADB:-adb}
 
@@ -96,7 +97,7 @@ process_options() {
 rooted_phone=0
 
 root=$(dirname $0)/../..
-package_name=org.chromium.content_shell
+package_name=org.tuenti.voice
 shared_lib_dir=$root/out/Release/lib.target
 gdb_args=''
 
