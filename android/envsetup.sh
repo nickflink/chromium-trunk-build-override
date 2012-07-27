@@ -41,6 +41,10 @@ case "${host_os}" in
   "mac")
     toolchain_dir="darwin-x86"
     rlink_binary="greadlink"
+    if ! command -v greadlink >/dev/null; then
+        echo "greadlink is required, you can get it via 'brew install coreutils'" >& 2
+        return 1
+    fi
     ;;
   *)
     echo "Host platform ${host_os} is not supported" >& 2
