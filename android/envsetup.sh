@@ -36,9 +36,11 @@ host_os=$(uname -s | sed -e 's/Linux/linux/;s/Darwin/mac/')
 case "${host_os}" in
   "linux")
     toolchain_dir="linux-x86"
+    rlink_binary="readlink"
     ;;
   "mac")
     toolchain_dir="darwin-x86"
+    rlink_binary="greadlink"
     ;;
   *)
     echo "Host platform ${host_os} is not supported" >& 2
@@ -50,7 +52,7 @@ esac
 case "${TARGET_PRODUCT-full}" in
   "full")
     DEFINES=" target_arch=arm"
-    DEFINES+=" arm_neon=0 armv7=1 arm_thumb=1 arm_fpu=vfpv3-d16"
+    DEFINES+=" arm_neon=0 armv7=0 arm_thumb=1 arm_fpu=vfpv3-d16"
     toolchain_arch="arm-linux-androideabi-4.4.3"
     ;;
   *x86*)
@@ -91,13 +93,13 @@ export PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools
 # Must have tools like arm-linux-androideabi-gcc on the path for ninja
 export PATH=$PATH:${ANDROID_TOOLCHAIN}
 
-CURRENT_DIR="$(readlink -f ${PWD})"
+CURRENT_DIR="$(${rlink_binary} -f ${PWD})"
 if [ -z "${CHROME_SRC}" ]; then
   # If $CHROME_SRC was not set, assume current directory is CHROME_SRC.
   export CHROME_SRC="${CURRENT_DIR}"
 fi
 
-if [ "${CURRENT_DIR/"${CHROME_SRC}"/}" == "${CURRENT_DIR}" ]; then
+if [[ "${CURRENT_DIR/"${CHROME_SRC}"/}" == "${CURRENT_DIR}" ]]; then
   # If current directory is not in $CHROME_SRC, it might be set for other
   # source tree. If $CHROME_SRC was set correctly and we are in the correct
   # directory, "${CURRENT_DIR/"${CHROME_SRC}"/}" will be "".
