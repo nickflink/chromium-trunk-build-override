@@ -842,9 +842,11 @@
       }, {
         'directx_sdk_path%': '$(DXSDK_DIR)',
       }],
-      ['os_posix==1 and OS!="mac" and OS!="ios"', {
+      ['os_posix==1 and OS!="mac" and OS!="ios" and OS!="android"', {
         # Figure out the python architecture to decide if we build pyauto.
-        #'python_arch%': '<!(<(DEPTH)/build/linux/python_arch.sh <(sysroot)/usr/<(system_libdir)/libpython<(python_ver).so.1.0)',
+        'python_arch%': '<!(<(DEPTH)/build/linux/python_arch.sh <(sysroot)/usr/<(system_libdir)/libpython<(python_ver).so.1.0)',
+      }],
+      ['os_posix==1 and OS!="mac" and OS!="ios"', {
         'conditions': [
           # TODO(glider): set clang to 1 earlier for ASan and TSan builds so
           # that it takes effect here.
@@ -3265,7 +3267,7 @@
         ['LINK.host', '$(LINK)'],
       ],
     }],
-    ['OS=="android" and "<(GENERATOR)"!="ninja" and HOST_OS!="mac"', {
+    ['OS=="android" and "<(GENERATOR)"!="ninja"', {
       # Hardcode the compiler names in the Makefile so that
       # it won't depend on the environment at make time.
       'make_global_settings': [
@@ -3277,17 +3279,11 @@
         ['LINK.host', '<!(which g++)'],
       ],
     }],
-    ['OS=="android" and "<(GENERATOR)"!="ninja"', {
+    ['OS=="android" and "<(GENERATOR)"!="ninja" and HOST_OS=="mac"', {
       'make_global_settings': [
-        ['CC', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-gcc)'],
-        ['CXX', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-g++)'],
-        ['LINK', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-gcc)'],
         ['AR', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-ar)'],
         ['LD', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-ld)'],
         ['RANLIB', '<!(/bin/echo -n ${ANDROID_GOMA_WRAPPER} ${ANDROID_TOOLCHAIN}/*-ranlib)'],
-        ['CC.host', '<!(which gcc)'],
-        ['CXX.host', '<!(which g++)'],
-        ['LINK.host', '<!(which g++)'],
       ],
     }],
   ],
