@@ -29,6 +29,7 @@ adb_shell () {
       local tempname=`basename $0`
       local TMPOUT=`mktemp -t ${tempname}`
       ;;
+  esac
   local LASTLINE RET
   local ADB=${ADB:-adb}
 
