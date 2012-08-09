@@ -40,7 +40,7 @@ case "${host_os}" in
     ;;
   "mac")
     toolchain_dir="darwin-x86"
-    rlink_command="mac_readlink"
+    rlink_command="./build/android/mac_readlink"
     ;;
   *)
     echo "Host platform ${host_os} is not supported" >& 2
