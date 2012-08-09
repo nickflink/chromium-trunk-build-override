@@ -36,15 +36,11 @@ host_os=$(uname -s | sed -e 's/Linux/linux/;s/Darwin/mac/')
 case "${host_os}" in
   "linux")
     toolchain_dir="linux-x86"
-    rlink_binary="readlink"
+    rlink_command="readlink -f"
     ;;
   "mac")
     toolchain_dir="darwin-x86"
-    rlink_binary="greadlink"
-    if ! command -v greadlink >/dev/null; then
-        echo "greadlink is required, you can get it via 'brew install coreutils'" >& 2
-        return 1
-    fi
+    rlink_command="mac_readlink"
     ;;
   *)
     echo "Host platform ${host_os} is not supported" >& 2
@@ -56,7 +52,7 @@ esac
 case "${TARGET_PRODUCT-full}" in
   "full")
     DEFINES=" target_arch=arm"
-    DEFINES+=" arm_neon=0 armv7=0 arm_thumb=1 arm_fpu=vfpv3-d16"
+    DEFINES+=" arm_neon=1 armv7=1 arm_thumb=1 arm_fpu=vfpv3-d16"
     toolchain_arch="arm-linux-androideabi-4.4.3"
     ;;
   *x86*)
@@ -97,7 +93,7 @@ export PATH=$PATH:${ANDROID_SDK_ROOT}/platform-tools
 # Must have tools like arm-linux-androideabi-gcc on the path for ninja
 export PATH=$PATH:${ANDROID_TOOLCHAIN}
 
-CURRENT_DIR="$(${rlink_binary} -f ${PWD})"
+CURRENT_DIR="$(${rlink_command} ${PWD})"
 if [ -z "${CHROME_SRC}" ]; then
   # If $CHROME_SRC was not set, assume current directory is CHROME_SRC.
   export CHROME_SRC="${CURRENT_DIR}"
