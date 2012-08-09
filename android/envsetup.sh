@@ -52,7 +52,7 @@ esac
 case "${TARGET_PRODUCT-full}" in
   "full")
     DEFINES=" target_arch=arm"
-    DEFINES+=" arm_neon=1 armv7=1 arm_thumb=1 arm_fpu=vfpv3-d16"
+    DEFINES+=" arm_neon=0 armv7=1 arm_thumb=1 arm_fpu=vfpv3-d16"
     toolchain_arch="arm-linux-androideabi-4.4.3"
     ;;
   *x86*)
